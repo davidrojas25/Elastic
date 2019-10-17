@@ -1,0 +1,13 @@
+{% for win_update in list_of_updates.updates | dict2items %}
+   {
+     "update": {
+       "kb": [
+         "{{ list_of_updates.updates.kb }}"
+       ],
+       "hostname: "{{inventory_hostname }}",
+       "installed": false,
+       "id": "{{ list_of_updates.updates.id }}",
+       "title": "{{ list_of_updates.updates.title }}"
+     }
+   }{{ "," if not loop.last }}
+{% endfor %}   
