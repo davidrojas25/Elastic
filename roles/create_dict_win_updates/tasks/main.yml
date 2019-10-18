@@ -1,4 +1,19 @@
 ---
+- name: Clean Up Reports Directory if it exists
+  file:
+    path: reports
+    state: absent
+  delegate_to: localhost
+  run_once: yes
+
+- name: Create Reports Directory
+  file:
+    path: reports
+    state: directory
+    mode: 0755
+  delegate_to: localhost
+  run_once: yes
+    
 - name: debug the  full list
   debug:
     var: list_of_updates
