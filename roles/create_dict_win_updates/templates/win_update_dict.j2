@@ -2,12 +2,12 @@
    {
      "update": {
        "kb": [
-         "{{ win_update.kb }}"
+         "{{ win_update.value.kb }}"
        ],
        "hostname: "{{inventory_hostname }}",
        "installed": false,
-       "id": "{{ win_update.id }}",
-       "title": "{{ win_update.title }}"
+       "id": "{{ win_update.value.id }}",
+       "title": "{{ win_update.value.title }}"
      }
    }{{ "," if not loop.last }}
 {% endfor %}   
