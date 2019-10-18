@@ -6,3 +6,4 @@
   roles:
     - win_update_gather
     - create_dict_win_updates
+    - send_file_elastic
