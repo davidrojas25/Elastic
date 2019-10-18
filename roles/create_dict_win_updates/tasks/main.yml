@@ -21,28 +21,28 @@
 - name: Template Rendering Indivisual Report
   template:
     src: win_update_dict.j2
-    dest: "reports/z{{ inventory_hostname }}_interim_report.json"
+    dest: "reports/{{ inventory_hostname }}_interim_report.json"
   delegate_to: localhost
 
-- name: Create Interim Report Header
-  template:
-    src: win_update_report_header.j2
-    dest: "reports/Consolidated_VMs_Report.json"
-  delegate_to: localhost
-  run_once: yes
-
-- name: Consolidate Interim Reports with Header
+- name: Consolidate Interim Reports only
   assemble:
     src: reports/
-    dest: reports/Consolidated_VMs_Report.json
+    dest: reports/zzConsolidated_VMs_Report.json
     delimiter: ','
   delegate_to: localhost
   run_once: yes
 
-- name: Generate Remaining Portion of Report
+- name: Create Interim file Header
+  template:
+    src: win_update_report_header.j2
+    dest: "reports/zjson_header.json"
+  delegate_to: localhost
+  run_once: yes
+
+- name: Generate footer of file
   template:
     src: win_update_report_footer.j2
-    dest: "reports/consolidated_vms_report_last_block.json"
+    dest: "reports/zzzjson_footer.json"
   delegate_to: localhost
   run_once: yes
 
@@ -65,13 +65,13 @@
 - name: Consolidate Final Report
   assemble:
     src: reports/
-    dest: reports/Consolidated_VMs_Report.json
+    dest: reports/ansible_data.json
   delegate_to: localhost
   run_once: yes
 
 - name: Final Clean Up
   file:
-    path: reports/consolidated_vms_report_last_block.json
+    path: reports/zzzjson_footer.json
     state: absent
   delegate_to: localhost
   run_once: yes  
@@ -86,6 +86,6 @@
     subject: "Ansible Report"
     body: "The new consolidated json data structure in a file"
     attach:
-     - reports/Consolidated_VMs_Report.json
+     - reports/ansible_data.json
   delegate_to: localhost
   run_once: yes  
