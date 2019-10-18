@@ -13,7 +13,7 @@
     mode: 0755
   delegate_to: localhost
   run_once: yes
-    
+
 - name: debug the  full list
   debug:
     var: list_of_updates
@@ -35,6 +35,7 @@
   assemble:
     src: reports/
     dest: reports/Consolidated_VMs_Report.json
+    delimiter: ','
   delegate_to: localhost
   run_once: yes
 
