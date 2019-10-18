@@ -1,4 +1,8 @@
 ---
+- name: debug the  full list
+  debug:
+    var: list_of_updates
+
 - name: Template Rendering Indivisual Report
   template:
     src: win_update_dict.j2
