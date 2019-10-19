@@ -2,11 +2,11 @@
 # send file or debug file
 - name: POST from contents of local JSON file
   uri:
-    url: http://192.168.150.70:9200/logstash-2019.10.08-000001/_doc/
+    url: http://192.168.150.70:9200/logstash-2019.10.08-000001/_doc/1
     method: PUT
     src: reports/ansible_data.json
     body_format: json
     user: root
     password: Sup3rFly!
     validate_certs: no
-
+  run_once: yes
