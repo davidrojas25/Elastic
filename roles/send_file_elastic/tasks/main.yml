@@ -4,7 +4,6 @@
   uri:
     url: http://192.168.150.70:9200/logstash-2019.10.08-000001/_doc/1
     method: PUT
-    src: reports/ansible_data.json
     body_format: json
     body: "{{ lookup('file','reports/ansible_data.json') }}" 
     headers:
