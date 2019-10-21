@@ -13,6 +13,8 @@
     headers:
       Content-Type: "application/json"
     validate_certs: no
-    status_code: 201
+    status_code: 
+      - 200
+      - 201
   run_once: yes
   delegate_to: localhost
