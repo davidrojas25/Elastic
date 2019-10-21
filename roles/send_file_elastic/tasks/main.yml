@@ -12,8 +12,7 @@
     body: "{{ lookup('file','reports/ansible_data.json') }}"
     headers:
       Content-Type: "application/json"
-    #user: root
-    #password: Sup3rFly!
     validate_certs: no
+    status_code: 201
   run_once: yes
   delegate_to: localhost
