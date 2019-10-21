@@ -9,10 +9,10 @@
     url: http://192.168.150.70:9200/logstash-2019.10.08-000001/_doc/1
     method: POST
     body_format: json
-    body: "{{ lookup('file','reports/ansible_data.json') }}" 
+    body: {"id":"20161024140306","version":"5.6.1","status":"UP"}
     headers:
       Content-Type: "application/json"
-    user: root
-    password: Sup3rFly!
+    #user: root
+    #password: Sup3rFly!
     validate_certs: no
   run_once: yes
