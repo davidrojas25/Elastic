@@ -16,3 +16,4 @@
     #password: Sup3rFly!
     validate_certs: no
   run_once: yes
+  delegate_to: localhost
