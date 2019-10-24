@@ -23,6 +23,7 @@
     src: win_update_dict.j2
     dest: "reports/{{ inventory_hostname }}_interim_report.json"
   delegate_to: localhost
+  when: list_of_updates != ""
 
 - name: Consolidate Interim Reports only
   assemble:
