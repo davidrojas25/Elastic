@@ -16,7 +16,7 @@
 
 - name: debug the  full list
   debug:
-    var: list_of_updates
+    var: list_of_updates.found_update_count
 
 - name: Template Rendering Indivisual Report
   template:
