@@ -11,7 +11,7 @@
     body_format: json
     body: "{{ lookup('file','reports/ansible_data.json') }}"
     headers:
-      Content-Type: "application/json"
+      Content-Type: "application/x-ndjson"
     validate_certs: no
     status_code: 
       - 200
