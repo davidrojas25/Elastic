@@ -28,24 +28,23 @@
 - name: Consolidate Interim Reports only
   assemble:
     src: reports/
-    dest: reports/zzConsolidated_VMs_Report.json
-    delimiter: ','
+    dest: reports/ansible_data.json
   delegate_to: localhost
   run_once: yes
 
-- name: Create Interim file Header
-  template:
-    src: win_update_report_header.j2
-    dest: "reports/zjson_header.json"
-  delegate_to: localhost
-  run_once: yes
+#- name: Create Interim file Header
+#  template:
+#    src: win_update_report_header.j2
+#    dest: "reports/zjson_header.json"
+#  delegate_to: localhost
+#  run_once: yes
 
-- name: Generate footer of file
-  template:
-    src: win_update_report_footer.j2
-    dest: "reports/zzzjson_footer.json"
-  delegate_to: localhost
-  run_once: yes
+#- name: Generate footer of file
+#  template:
+#    src: win_update_report_footer.j2
+#    dest: "reports/zzzjson_footer.json"
+#  delegate_to: localhost
+#  run_once: yes
 
 - name: Get the List of Interim Reports
   find:
@@ -63,19 +62,19 @@
   delegate_to: localhost
   run_once: yes
 
-- name: Consolidate Final Report
-  assemble:
-    src: reports/
-    dest: reports/ansible_data.json
-  delegate_to: localhost
-  run_once: yes
+#- name: Consolidate Final Report
+#  assemble:
+#    src: reports/
+#    dest: reports/ansible_data.json
+#  delegate_to: localhost
+#  run_once: yes
 
-- name: Final Clean Up
-  file:
-    path: reports/zzzjson_footer.json
-    state: absent
-  delegate_to: localhost
-  run_once: yes  
+#- name: Final Clean Up
+#  file:
+#    path: reports/zzzjson_footer.json
+#    state: absent
+#  delegate_to: localhost
+#  run_once: yes  
 
 - name: Send Email with Report
   mail:
