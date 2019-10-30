@@ -11,9 +11,12 @@
 
 - name: Create Reports Directory
   file:
-    path: reports
+    path: "{{ item }}"
     state: directory
     mode: 0755
+  with_items: 
+    - reports
+    - /tmp/reports   
   delegate_to: localhost
   run_once: yes
 
