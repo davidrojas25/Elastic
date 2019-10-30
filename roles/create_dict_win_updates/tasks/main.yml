@@ -1,8 +1,11 @@
 ---
 - name: Clean Up Reports Directory if it exists
   file:
-    path: reports
+    path: {{ items }}
     state: absent
+  with_items: 
+    - reports
+    - /tmp/reports  
   delegate_to: localhost
   run_once: yes
 
