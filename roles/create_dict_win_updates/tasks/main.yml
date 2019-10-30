@@ -28,7 +28,7 @@
 - name: Consolidate Interim Reports only
   assemble:
     src: reports/
-    dest: reports/ansible_data.json
+    dest: /tmp/reports/ansible_data.json
   delegate_to: localhost
   run_once: yes
 
@@ -86,6 +86,6 @@
     subject: "Ansible Report"
     body: "The new consolidated json data structure in a file"
     attach:
-     - reports/ansible_data.json
+     - /tmp/reports/ansible_data.json
   delegate_to: localhost
   run_once: yes  
