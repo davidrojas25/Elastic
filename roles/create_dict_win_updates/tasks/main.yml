@@ -1,4 +1,7 @@
 ---
+- name: debug the ansible_facts
+  debug:
+    msg: "{{ ansible_facts }}"
 - name: Clean Up Reports Directory if it exists
   file:
     path: "{{ item }}"
