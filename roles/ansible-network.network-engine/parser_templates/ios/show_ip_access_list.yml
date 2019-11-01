@@ -1,0 +1,91 @@
+---
+- name: match sections
+  pattern_match:
+    regex: "^\\s+(\\d+)"
+    match_all: true
+    match_greedy: true
+  register: section 
+
+- name: match prefix values
+  pattern_group:
+    - name: match name
+      pattern_match:
+        regex: "(^[A-Z]\\w+\\sIP access list\\s\\S+)"
+        content: "{{ item }}"
+      register: access_list
+
+    - name: match entries
+      pattern_match:
+        regex: "^\\s+\\d+\\s(.*)"
+        content: "{{ item }}"
+        match_all: true
+      register: entry
+  loop: "{{ section }}"
+  register: entries
+
+- name: display entries
+  debug:
+    var: entries
+
+- name: template entries
+  json_template:
+    template:
+      - key: access_list
+        value: "{{ item.access_list.acl_name }}"
+      - key: entries
+        elements:
+          - key: sequence
+            value: "{{ it.matches.0 }}"
+          - key: action
+            value: "{{ it.matches.1 }}"
+          - key: prefix
+            value: "{{ it.matches.2 }}"
+          - key: operator
+            value: "{{ it.matches.4 }}"
+          - key: length
+            value: "{{ it.matches.5 }}"
+        repeat_for: "{{ item.entry }}"
+        repeat_var: it
+  register: access_list_list
+  export: true
+  loop: "{{ entries }}"
+
+- name: template entries
+  json_template:
+    template:
+      - key: "{{ item.access_list.acl_name }}"
+        object:
+          - key: entries
+            elements:
+              - key: sequence
+                value: "{{ it.matches.0 }}"
+              - key: action
+                value: "{{ it.matches.1 }}"
+              - key: prefix
+                value: "{{ it.matches.2 }}"
+              - key: operator
+                value: "{{ it.matches.3 }}"
+              - key: length
+                value: "{{ it.matches.4 }}"
+            repeat_for: "{{ item.entry }}"
+            repeat_var: it
+  loop: "{{ entries }}"
+  export: true
+  export_as: dict
+  extend: cisco_ios.config
+  register: access_list_dict
+
+- name: template acl and prefix
+  json_template:
+    template:
+      - key: acl
+        elements:
+          - key: acl_name
+            value: "{{ item.access_list.acl_name }}"
+          - key: prefix
+            value: "{{ it.matches.2 }}"
+        repeat_for: "{{ item.entry }}"
+        repeat_var: it
+  register: access_list_basic
+  export: true
+  loop: "{{ entries }}"

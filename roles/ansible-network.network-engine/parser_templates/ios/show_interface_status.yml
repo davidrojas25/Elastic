@@ -1,0 +1,79 @@
+---
+- name: parser meta data
+  parser_metadata:
+    version: 1.0
+    command: show interface
+    network_os: ios
+
+- name: match sections
+  pattern_match:
+    regex: "([A-Z]\\w+\\d\\/[^ ]+)"
+    match_all: true
+    match_greedy: true
+  register: section
+
+- name: match port values
+  pattern_group:
+    - name: match interface name
+      pattern_match:
+        regex: "([A-Z]\\w+\\d\\/[^ ]+)"
+        content: "{{ item }}"
+      register: port_name
+
+    - name: match port status
+      pattern_match:
+        regex: "\\s+([n,c]\\w+)\\s+"
+        content: "{{ item }}"
+      register: status
+
+    - name: match vlan
+      pattern_match:
+        regex: "[t,d]\\s+([a-z,\\d]+)"
+        content: "{{ item }}"
+      register: vlan
+
+    - name: match duplex
+      pattern_match:
+        regex: "[d,t]\\s+[a-z,\\d]+\\s+([a-z][-,a-z]\\w+)"
+        content: "{{ item }}"
+      register: duplex
+
+    - name: match speed
+      pattern_match:
+        regex: "[l,f,o]\\s+([a-z,\\d][-,\\w][\\d,\\w]+)"
+        content: "{{ item }}"
+      register: speed
+
+    - name: match type
+      pattern_match:
+        regex: "[l,f,o]\\s+[a-z,\\d][-,\\w][\\d,\\w]+\\s([\\w,\\d]+[\\/,\\s][\\d,\\w]+)"
+        content: "{{ item }}"
+      register: type
+
+  loop: "{{ section }}"
+  register: ports
+
+- name: generate json data structure
+  json_template:
+    template:
+      - key: "{{ item.port_name.matches.0 }}"
+        object:
+          - key: config
+            object:
+              - key: port_name
+                value: "{{ item.port_name.matches.0 }}"
+              - key: status
+                value: "{{ item.status.matches.0 }}"
+              - key: vlan
+                value: "{{ item.vlan.matches.0 }}"
+              - key: duplex
+                value: "{{ item.duplex.matches.0 }}"
+              - key: speed
+                value: "{{ item.speed.matches.0 }}"
+              - key: type
+                value: "{{ item.type.matches.0 }}"                    
+
+  loop: "{{ ports }}"
+  export: true
+  #export_as: "{{ export_type }}"
+  register: port_facts

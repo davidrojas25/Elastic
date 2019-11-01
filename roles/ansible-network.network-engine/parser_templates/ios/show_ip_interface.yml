@@ -1,0 +1,207 @@
+---
+- name: parser meta data
+  parser_metadata:
+    version: 1.0
+    command: show ip interface
+    network_os: ios
+
+- name: match sections
+  pattern_match:
+    regex: "([A-Z]\\w+\\d\\/[^ ]+)"
+    match_all: true
+    match_greedy: true
+  register: section
+
+- name: match interfaces
+  pattern_group:
+    - name: match interface name
+      pattern_match:
+        regex: "([A-Z]\\w+\\d\\/[^ ]+)"
+        content: "{{ item }}"
+      register: name
+
+    - name: match interface physical status
+      pattern_match:
+        regex: "[A-Z]\\w+\\d\\/[^ ]+\\sis\\s(\\w+),"
+        content: "{{ item }}"
+      register: status_physical
+
+    - name: match interface line protocol
+      pattern_match:
+        regex: "line\\sprotocol\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: status_protocol
+
+    - name: match IP address
+      pattern_match:
+        regex: "Internet\\saddress\\sis\\s(\\d+\\.\\d+\\.\\d+\\.\\d+)"
+        content: "{{ item }}"
+      register: ip_address
+
+    - name: match mtu
+      pattern_match:
+        regex: "MTU\\sis\\s(\\d+)"
+        content: "{{ item }}"
+      register: mtu
+
+    - name: match ip helper
+      pattern_match:
+        regex: "Helper\\saddress\\sis\\s([\\d+\\.\\d+\\.\\d+\\.\\d+, not set]+)"
+        content: "{{ item }}"
+      register: ip_helper
+
+    - name: match ip directed broadcast
+      pattern_match:
+        regex: "Directed\\sbroadcast\\sforwarding\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: directed_broadcast 
+
+    - name: match outgoing access list
+      pattern_match:
+        regex: "Outgoing\\saccess\\slist\\sis\\s([\\w+,not set]+)"
+        content: "{{ item }}"
+      register: out_access_list
+
+    - name: match ip inbound access list
+      pattern_match:
+        regex: "Inbound\\s+access\\slist\\sis\\s([\\w+,not set]+)"
+        content: "{{ item }}"
+      register: in_access_list
+
+    - name: match Proxy ARP
+      pattern_match:
+        regex: "\\s\\sProxy\\sARP\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: proxy_arp
+
+    - name: match local proxy ARP
+      pattern_match:
+        regex: "Local Proxy\\sARP\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: local_proxy_arp   
+
+    - name: match split horizon
+      pattern_match:
+        regex: "Split horizon\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: split_horizon
+
+    - name: match ip fast switching
+      pattern_match:
+        regex: "IP\\sfast\\sswitching\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: ip_fast_switching
+
+    - name: match IP Flow switching
+      pattern_match:
+        regex: "IP Flow switching\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: ip_flow_switching                                       
+
+    - name: match IP CEF switching
+      pattern_match:
+        regex: "IP CEF switching\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: ip_cef_switching
+
+    - name: match IP multicast fast switching
+      pattern_match:
+        regex: "IP multicast fast switching\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: ip_multicast_fast_switching  
+
+    - name: match IP output packet accounting
+      pattern_match:
+        regex: "IP output packet accounting\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: ip_packet_accounting   
+
+    - name: match Policy Routing
+      pattern_match:
+        regex: "Policy routing\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: policy_routing 
+
+    - name: match NAT
+      pattern_match:
+        regex: "Network address translation\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: nat    
+
+    - name: match BGP Policy Mapping
+      pattern_match:
+        regex: "BGP Policy Mapping\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: bgp_policy_mapping
+
+    - name: match WCCP Redirect outbound
+      pattern_match:
+        regex: "WCCP Redirect outbound\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: wccp_redirect_outbound
+
+    - name: match WCCP Redirect inbound
+      pattern_match:
+        regex: "WCCP Redirect inbound\\sis\\s(\\w+)"
+        content: "{{ item }}"
+      register: wccp_redirect_inbound          
+
+  loop: "{{ section }}"
+  register: interfaces
+
+- name: generate json data structure
+  json_template:
+    template:
+      - key: "{{ item.name.matches.0 }}"
+        object:
+          - key: config
+            object:
+              - key: Interface_name
+                value: "{{ item.name.matches.0 }}"
+              - key: status_physical
+                value: "{{ item.status_physical.matches.0 }}"
+              - key: status_protocol
+                value: "{{ item.status_protocol.matches.0 }}"
+              - key: ip_address
+                value: "{{ item.ip_address.matches.0 }}"
+              - key: mtu
+                value: "{{ item.mtu.matches.0 }}"
+              - key: ip_helper
+                value: "{{ item.ip_helper.matches.0 }}" 
+              - key: directed_broadcast
+                value: "{{ item.directed_broadcast.matches.0 }}"
+              - key: out_access_list
+                value: "{{ item.out_access_list.matches.0 }}"
+              - key: in_access_list
+                value: "{{ item.in_access_list.matches.0 }}"
+              - key: proxy_arp
+                value: "{{ item.proxy_arp.matches.0 }}"
+              - key: local_proxy_arp
+                value: "{{ item.local_proxy_arp.matches.0 }}"
+              - key: split_horizon
+                value: "{{ item.split_horizon.matches.0 }}"   
+              - key: ip_fast_switching
+                value: "{{ item.ip_fast_switching.matches.0 }}"
+              - key: ip_flow_switching
+                value: "{{ item.ip_flow_switching.matches.0 }}"
+              - key: ip_cef_switching
+                value: "{{ item.ip_cef_switching.matches.0 }}" 
+              - key: ip_multicast_fast_switching
+                value: "{{ item.ip_multicast_fast_switching.matches.0 }}"
+              - key: ip_packet_accounting
+                value: "{{ item.ip_packet_accounting.matches.0 }}"
+              - key: policy_routing
+                value: "{{ item.policy_routing.matches.0 }}"
+              - key: nat
+                value: "{{ item.nat.matches.0 }}"
+              - key: bgp_policy_mapping
+                value: "{{ item.bgp_policy_mapping.matches.0 }}"
+              - key: wccp_redirect_outbound
+                value: "{{ item.wccp_redirect_outbound.matches.0 }}"   
+              - key: wccp_redirect_inbound
+                value: "{{ item.wccp_redirect_inbound.matches.0 }}"                                                               
+
+  loop: "{{ interfaces }}"
+  export: true
+  #export_as: "{{ export_type }}"
+  register: ip_interface_facts

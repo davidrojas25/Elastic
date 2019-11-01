@@ -1,0 +1,4 @@
+#jinja2: keep_trailing_newline:True
+{% for win_update in list_of_updates.updates | dict2items %}
+{ "@timestamp": "{{ ansible_date_time.iso8601 }}",  } }
+{% endfor %}
