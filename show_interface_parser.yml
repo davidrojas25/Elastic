@@ -1,7 +1,7 @@
 ---
 - name: GENERATE INTERFACE REPORT
   hosts: rojaslab_network
-  gather_facts: no
+  gather_facts: yes
   connection: network_cli
 
   roles:
