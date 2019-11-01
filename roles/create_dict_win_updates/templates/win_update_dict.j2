@@ -1,4 +1,4 @@
 #jinja2: keep_trailing_newline:True
 {% for win_update in list_of_updates.updates | dict2items %}
-{ "@timestamp": "{{ ansible_date_time.iso8601 }}", "update": { "kb": [ "{{ win_update.value.kb[0] }} "  ],  "hostname": "{{ ansible_facts.hostname }}",  "ipaddress": "{{ ansible_ip_addresses[0] }}", "osname": "{{ ansible_os_name }}", "Uptime": "{{ ansible_facts.uptime_seconds }}", "title": "{{ win_update.value.title }}",  "id": "{{ win_update.value.id }}", "installed": false } }
+{ "@timestamp": "{{ ansible_date_time.iso8601 }}", "update": { "kb": [ "{{ win_update.value.kb[0] }} "  ],  "hostname": "{{ ansible_facts.hostname }}",  "ipaddress": "{{ ansible_ip_addresses[0] }}", "osname": "{{ ansible_os_name }}", "Uptime": "{{ (ansible_facts.uptime_seconds/86400) }}", "title": "{{ win_update.value.title }}",  "id": "{{ win_update.value.id }}", "installed": false } }
 {% endfor %}
