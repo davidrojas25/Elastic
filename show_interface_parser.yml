@@ -6,6 +6,7 @@
 
   roles:
     - ansible-network.network-engine
+    - create_show_int_data
 
   tasks:
     - name: CAPTURE SHOW INTERFACES
