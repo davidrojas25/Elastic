@@ -1,4 +1,6 @@
 #jinja2: keep_trailing_newline:True
-{% for win_update in list_of_updates.updates | dict2items %}
-{ "@timestamp": "{{ ansible_date_time.iso8601 }}",  } }
+{% for interface in interface_facts %}    
+    {% for name in interface %}
+{ "@timestamp": "{{ ansible_date_time.iso8601 }}", "Interface Name": "{{ interface[name].config.name }}", "{{ interface[name].config.description }}", "{{ interface[name].config.status }}", "{{ interface[name].config.rxload }}", "{{ interface[name].config.txload }}", "{{ interface[name].config.output_errors }} " } }
+    {% endfor %} 
 {% endfor %}
