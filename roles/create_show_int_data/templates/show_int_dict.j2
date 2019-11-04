@@ -1,6 +1,6 @@
 #jinja2: lstrip_blocks: True
 {% for interface in interface_facts %}    
     {% for name in interface %}
-{ "@timestamp": "{{ ansible_date_time.iso8601 }}", "Interface Name": "{{ interface[name].config.name }}", "Interface Description": "{{ interface[name].config.description }}", "Interface Status": "{{ interface[name].config.status }}", "rxload": "{{ interface[name].config.rxload }}", "txload": "{{ interface[name].config.txload }}", "Output Erorrs": "{{ interface[name].config.output_errors }}" } 
+{ "@timestamp": "{{ ansible_date_time.iso8601 }}", "Interface Name": "{{ interface[name].config.name }}", "Interface Description": "{{ interface[name].config.description }}", "Interface Status": "{{ interface[name].config.status }}", "rxload": "{{ interface[name].config.rxload }}", "txload": "{{ interface[name].config.txload }}", "Output Erorrs": "{{ interface[name].config.output_errors }}" } }
 {% endfor %} 
 {% endfor %}
