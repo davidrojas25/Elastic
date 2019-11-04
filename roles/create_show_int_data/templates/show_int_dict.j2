@@ -1,4 +1,4 @@
-#jinja2: trim_blocks: True
+#jinja2: lstrip_blocks: True
 {% for interface in interface_facts %}    
     {% for name in interface %}
 { "@timestamp": "{{ ansible_date_time.iso8601 }}", "Interface Name": "{{ interface[name].config.name }}", "{{ interface[name].config.description }}", "{{ interface[name].config.status }}", "{{ interface[name].config.rxload }}", "{{ interface[name].config.txload }}", "{{ interface[name].config.output_errors }}" } 
