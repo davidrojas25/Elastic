@@ -22,7 +22,7 @@
 
 - name: Template Rendering Indivisual Report
   template:
-    src: show_int_dict.j2
+    src: ios_facts_data.j2
     dest: "net_reports/{{ inventory_hostname }}_interim_report.json"
   delegate_to: localhost
 
