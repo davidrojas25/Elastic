@@ -1,7 +1,7 @@
 ---
 - name: Collect Network Data from Cisco Devices
   hosts: rojaslab_network
-  gather_facts: no
+  gather_facts: yes
   connection: network_cli
 
   roles:
