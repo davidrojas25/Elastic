@@ -1,0 +1,8 @@
+---
+- name: IOS Facts module collection
+  ios_facts:
+    gather_subset: all  
+
+- name: print out IOS Facts
+  debug:
+    var: ansible_net_interfaces
